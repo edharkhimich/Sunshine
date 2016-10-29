@@ -1,5 +1,34 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="item_contaier_height">65dp</dimen>
+    <dimen name="item_icon_width">50dp</dimen>
+    <dimen name="item_icon_height">50dp</dimen>
+    <dimen name="item_icon_margin_left">10dp</dimen>
+    <dimen name="item_daytv_margin_left">20dp</dimen>
+    <dimen name="item_daytv_margin_top">7dp</dimen>
+    <dimen name="item_daytv_size">18sp</dimen>
+    <dimen name="item_conditiontv_margin_left">20dp</dimen>
+    <dimen name="item_conditiontv_margin_top">2dp</dimen>
+    <dimen name="item_conditiontv_size">14sp</dimen>
+    <dimen name="item_temphigh_margin_right">20dp</dimen>
+    <dimen name="item_temphigh_margin_top">7dp</dimen>
+    <dimen name="item_temphigh_size">18sp</dimen>
+    <dimen name="item_templow_margin_right">30dp</dimen>
+    <dimen name="item_templow_size">14sp</dimen>
+    <dimen name="appbar_layout_height">200dp</dimen>
+    <dimen name="weather_icon_margin_top">20dp</dimen>
+    <dimen name="location_text_view_margin_left">30dp</dimen>
+    <dimen name="lacotion_text_view_margin_top">20dp</dimen>
+    <dimen name="location_text_view_size">24sp</dimen>
+    <dimen name="temp_tv_margin_left">30dp</dimen>
+    <dimen name="temp_tv_size">58sp</dimen>
+    <dimen name="condition_tv_margin_right">20dp</dimen>
+    <dimen name="condition_tv_margin_top">5dp</dimen>
+    <dimen name="condition_tv_size">20sp</dimen>
+    <dimen name="progress_bar_margin_botton">10dp</dimen>
+    <dimen name="recview_paddleft">16dp</dimen>
+    <dimen name="recview_paddright">16dp</dimen>
 </resources>

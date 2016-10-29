@@ -1,4 +1,4 @@
-package com.example.appleeeee.myapplication;
+package com.example.appleeeee.myapplication.activity;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -8,11 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import com.example.appleeeee.myapplication.R;
 import com.example.appleeeee.myapplication.fragments.CityFragment;
 import com.example.appleeeee.myapplication.model.ProgressBar;
 
 public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
+    Toolbar toolbar;
 
 
     @Override
@@ -22,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         progressBar = new ProgressBar(MainActivity.this);
         progressBar.setCancelable(false);
-        Toolbar toolbar = new Toolbar(getApplicationContext());
+        toolbar = new Toolbar(getApplicationContext());
         toolbar.setNavigationIcon(R.drawable.ic_action_back);
         if (getSupportFragmentManager().findFragmentById(R.id.container) == null) {
             changeFragment(new CityFragment(), false);
@@ -57,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         if (progressBar != null) {
             progressBar.dismiss();
         }
+    }
+
+    public Toolbar getToolbar(){
+        return toolbar;
     }
 }
 

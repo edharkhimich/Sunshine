@@ -6,14 +6,14 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp">
+        android:layout_height="@dimen/item_contaier_height">
 
         <ImageView
             android:id="@+id/item_image"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/item_icon_width"
+            android:layout_height="@dimen/item_icon_height"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="@dimen/item_icon_margin_left"
             android:src="@drawable/ic_snowing" />
 
 
@@ -21,10 +21,10 @@
             android:id="@+id/day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="7dp"
+            android:layout_marginLeft="@dimen/item_daytv_margin_left"
+            android:layout_marginTop="@dimen/item_daytv_margin_top"
             android:layout_toRightOf="@+id/item_image"
-            android:textSize="18sp"
+            android:textSize="@dimen/item_daytv_size"
             android:textStyle="bold" />
 
         <TextView
@@ -32,10 +32,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/day"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginLeft="@dimen/item_conditiontv_margin_left"
+            android:layout_marginTop="@dimen/item_conditiontv_margin_top"
             android:layout_toRightOf="@id/item_image"
-            android:textSize="14sp"
+            android:textSize="@dimen/item_conditiontv_size"
             android:textStyle="italic" />
 
         <TextView
@@ -43,9 +43,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="7dp"
-            android:textSize="18sp"
+            android:layout_marginRight="@dimen/item_temphigh_margin_right"
+            android:layout_marginTop="@dimen/item_temphigh_margin_top"
+            android:textSize="@dimen/item_temphigh_size"
             android:textStyle="bold" />
 
         <TextView
@@ -54,8 +54,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/temp_high"
-            android:layout_marginRight="30dp"
-            android:textSize="14sp"
+            android:layout_marginRight="@dimen/item_templow_margin_right"
+            android:textSize="@dimen/item_templow_size"
             android:textStyle="italic" />
 
     </RelativeLayout>

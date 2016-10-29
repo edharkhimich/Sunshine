@@ -3,18 +3,23 @@ package com.example.appleeeee.myapplication.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.appleeeee.myapplication.MainActivity;
+import com.example.appleeeee.myapplication.listeners.AppBarStateChangeListener;
+import com.example.appleeeee.myapplication.activity.MainActivity;
 import com.example.appleeeee.myapplication.R;
 import com.example.appleeeee.myapplication.adapter.ForecastAdapter;
 import com.example.appleeeee.myapplication.api.Api;
@@ -22,10 +27,6 @@ import com.example.appleeeee.myapplication.model.Forecast;
 import com.example.appleeeee.myapplication.model.Model;
 
 import net.danlew.android.joda.JodaTimeAndroid;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.List;
 
@@ -58,6 +59,9 @@ public class MainFragment extends Fragment {
     private List<Forecast> list;
     private ForecastAdapter adapter;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     public MainFragment() {
     }
 
@@ -70,20 +74,61 @@ public class MainFragment extends Fragment {
         JodaTimeAndroid.init(getActivity());
         ButterKnife.bind(this, v);
 
+
         Bundle bundle = this.getArguments();
         cityBundle = bundle.getString(CityFragment.KEY);
         query = "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"" + cityBundle + "\")";
 
+        AppBarLayout appBarLayout = (AppBarLayout) v.findViewById(R.id.weather_holder);
+        appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+            @Override
+            public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                if (state.name().equals("COLLAPSED")) {
+                    ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+                    setHasOptionsMenu(true);
+
+                    toolbar.setNavigationIcon(R.drawable.ic_action_back);
+
+                    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getActivity().onBackPressed();
+                        }
+                    });
+                    toolbar.setTitle(getString(R.string.weather_in) + cityBundle);
+                } else if (state.name().equals(State.IDLE)) {
+                    toolbar.setTitle(null);
+                    toolbar.setNavigationIcon(null);
+                    setHasOptionsMenu(false);
+                }
+            }
+        });
+
         makingRequest();
-        ((MainActivity) getActivity()).dismissDialog();
         return v;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.forecast_fragment, menu);
+    }
 
-    private void formatTime() {
-        DateTime dt = new DateTime();
-        DateTimeFormatter formatter = DateTimeFormat
-                .forPattern("EEE, dd MMM yyyy HH:mm a z");
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+            case R.id.refresh:
+                makingRequest();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+//    private void formatTime() {
+//        DateTime dt = new DateTime();
+//        DateTimeFormatter formatter = DateTimeFormat
+//                .forPattern("EEE, dd MMM yyyy HH:mm a z");
 //        if (lastBuildDate.contains("EEST")) {
 //            dt = formatter.parseDateTime(lastBuildDate.replace("EEST", "EST"));
 //        } else if (lastBuildDate.contains("BST")) {
@@ -93,15 +138,14 @@ public class MainFragment extends Fragment {
 //        }
 //        dt = formatter.parseDateTime(lastBuildDate);
 //        }
-        DateTimeFormatter formatter2 = DateTimeFormat
-                .forPattern("HH:mm");
-
-        lastBuildDate = formatter2.print(dt);
-    }
+//        DateTimeFormatter formatter2 = DateTimeFormat
+//                .forPattern("HH:mm");
+//
+//        lastBuildDate = formatter2.print(dt);
+//    }
 
     private void setAdapter() {
         adapter = new ForecastAdapter(getActivity());
-
         adapter.setList(list);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -120,17 +164,16 @@ public class MainFragment extends Fragment {
                                          lastBuildDate = response.body().getQuery().getResults().getChannel().getLastBuildDate();
                                          list = response.body().getQuery().getResults().getChannel().getItem().getForecast();
 //                                         formatTime();
-                                         Log.d("mLog", "LastBuildDate = " + lastBuildDate);
                                          temperatureC = (int) ((Integer.valueOf(temperatureF) - 32) / 1.8000);
                                          if (city != null) {
                                              locationTv.setText(city);
                                          } else {
-                                             locationTv.setText("Unknown location");
+                                             locationTv.setText(R.string.unknown_location);
                                          }
                                          if (temperatureF != null) {
                                              temperatureTv.setText((temperatureC) + " \u00B0C");
                                          } else {
-                                             temperatureTv.setText("Unknown temperature");
+                                             temperatureTv.setText(R.string.unknown_temperature);
                                          }
                                          if (conditionText != null) {
                                              if (conditionText.equalsIgnoreCase("Scattered Showers")) {
@@ -165,7 +208,8 @@ public class MainFragment extends Fragment {
                                                  weatherIcon.setImageResource(R.drawable.clear_night);
                                              } else if (conditionText.equalsIgnoreCase("Sunny")
                                                      || conditionText.equalsIgnoreCase("Fair (Day)")
-                                                     || conditionText.equalsIgnoreCase("Hot")) {
+                                                     || conditionText.equalsIgnoreCase("Hot")
+                                                     || conditionText.equalsIgnoreCase("Clear")) {
                                                  weatherIcon.setImageResource(R.drawable.sunny);
                                              } else if (conditionText.equalsIgnoreCase("Breezy")
                                                      || conditionText.equalsIgnoreCase("Partly Cloudy (Day)")) {
@@ -202,32 +246,29 @@ public class MainFragment extends Fragment {
                                                      || conditionText.equalsIgnoreCase("Blowing Snow")
                                                      || conditionText.equalsIgnoreCase("Sleet")) {
                                                  weatherIcon.setImageResource(R.drawable.snow);
-                                             }
-                                             else {
+                                             } else {
                                                  weatherIcon.setImageResource(R.drawable.na);
                                              }
                                              conditionTv.setText(conditionText);
                                          } else {
-                                             conditionTv.setText("Unknown condition");
+                                             conditionTv.setText(R.string.unknown_condition);
                                          }
                                          setAdapter();
                                      } else {
-                                         Toast.makeText(getActivity(), "Please enter correct city", Toast.LENGTH_LONG).show();
+                                         Toast.makeText(getActivity(), R.string.please_enter_correct_city, Toast.LENGTH_LONG).show();
                                          ((MainActivity) getActivity()).changeFragment(new CityFragment(), false);
                                      }
                                  } else {
-                                     Toast.makeText(getActivity(), "Wrong response. " +
-                                             "Please check all your details" +
-                                             " and internet connection", Toast.LENGTH_LONG).show();
+                                     Toast.makeText(getActivity(), R.string.please_check_all_details, Toast.LENGTH_LONG).show();
                                  }
+                                 ((MainActivity) getActivity()).dismissDialog();
                              }
 
                              @Override
                              public void onFailure(Call<Model> call, Throwable t) {
-                                 Log.d("TAG", "Error = " + String.valueOf(t.getMessage()));
+                                 Toast.makeText(getActivity(), R.string.error_in_response, Toast.LENGTH_LONG).show();
                              }
                          }
                 );
     }
-
 }

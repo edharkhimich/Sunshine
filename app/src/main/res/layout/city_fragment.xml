@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/submit_btn"
         android:layout_centerHorizontal="true"
-        android:hint="Enter your city"/>
+        android:hint="@string/enter_your_city"/>
 
     <Button
         android:id="@+id/submit_btn"
@@ -19,6 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Submit"/>
+        android:text="@string/submit"/>
 
 </RelativeLayout>

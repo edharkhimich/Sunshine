@@ -6,13 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.appleeeee.myapplication.MainActivity;
+import com.example.appleeeee.myapplication.activity.MainActivity;
 import com.example.appleeeee.myapplication.R;
-import com.example.appleeeee.myapplication.model.ProgressBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,12 +30,15 @@ public class CityFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.city_fragment, container, false);
-
         unbinder = ButterKnife.bind(this, v);
-
         cityEditText.requestFocus();
-
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        cityEditText.setText(null);
+        super.onResume();
     }
 
     @Override

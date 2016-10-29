@@ -1,62 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+<android.support.design.widget.CoordinatorLayout android:id="@+id/container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.appleeeee.myapplication.MainActivity">
+    android:fitsSystemWindows="true"
+    tools:context="com.example.appleeeee.myapplication.activity.MainActivity"
+    xmlns:tools="http://schemas.android.com/tools">
 
-
-    <RelativeLayout
+    <android.support.design.widget.AppBarLayout
         android:id="@+id/weather_holder"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:background="@drawable/blue_background">
+        android:layout_height="@dimen/appbar_layout_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <ImageView
-            android:id="@+id/weather_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"/>
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:title=""
+            app:titleEnabled="false"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-        <TextView
-            android:id="@+id/location_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp"
-            android:layout_toRightOf="@id/weather_icon"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/blue_background"/>
 
-        <TextView
-            android:id="@+id/temperature_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/location_text_view"
-            android:layout_marginLeft="30dp"
-            android:layout_toRightOf="@+id/weather_icon"
-            android:textSize="58sp" />
 
-        <TextView
-            android:id="@+id/condition_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/temperature_text_view"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="5dp"
-            android:textSize="22sp" />
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/weather_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/weather_icon_margin_top"/>
+
+            <TextView
+                android:id="@+id/location_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/location_text_view_margin_left"
+                android:layout_marginTop="@dimen/lacotion_text_view_margin_top"
+                android:layout_toRightOf="@id/weather_icon"
+                android:textSize="@dimen/location_text_view_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/temperature_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/location_text_view"
+                android:layout_marginLeft="@dimen/temp_tv_margin_left"
+                android:layout_toRightOf="@+id/weather_icon"
+                android:textSize="@dimen/temp_tv_size" />
+
+            <TextView
+                android:id="@+id/condition_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/temperature_text_view"
+                android:layout_marginRight="@dimen/condition_tv_margin_right"
+                android:layout_marginTop="@dimen/condition_tv_margin_top"
+                android:textSize="@dimen/condition_tv_size" />
+            </RelativeLayout>
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/UserTheme" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:layout_below="@+id/weather_holder"
-        android:scrollbars="vertical" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -4,25 +4,10 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.appleeeee.myapplication.MainActivity">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorKEPrimary"
-        android:elevation="4dp">
-
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_logo"
-            android:layout_marginLeft="10dp"/>
-    </android.support.v7.widget.Toolbar>
+    tools:context="com.example.appleeeee.myapplication.activity.MainActivity">
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/my_toolbar"/>
+        android:layout_height="match_parent"/>
 </RelativeLayout>

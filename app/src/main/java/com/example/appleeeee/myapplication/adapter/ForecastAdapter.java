@@ -7,12 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.appleeeee.myapplication.R;
 import com.example.appleeeee.myapplication.model.Forecast;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +28,10 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHo
     private int temperatureLowC;
     private String condition;
 
-
     public ForecastAdapter(Context context){
         this.context = context;
         forecastList = new ArrayList<>();
-
     }
-
 
     @Override
     public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
