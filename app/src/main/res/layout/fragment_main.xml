@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout android:id="@+id/container"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.appleeeee.myapplication.activity.MainActivity"
-    xmlns:tools="http://schemas.android.com/tools">
+    tools:context="com.example.appleeeee.myapplication.activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/weather_holder"
@@ -20,53 +20,55 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
             android:theme="@style/AppTheme.AppBarOverlay"
+            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/blue_background"/>
 
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/weather_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/weather_icon_margin_top"/>
 
-            <TextView
-                android:id="@+id/location_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/location_text_view_margin_left"
-                android:layout_marginTop="@dimen/lacotion_text_view_margin_top"
-                android:layout_toRightOf="@id/weather_icon"
-                android:textSize="@dimen/location_text_view_size"
-                android:textStyle="bold" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/blue_background" />
 
-            <TextView
-                android:id="@+id/temperature_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/location_text_view"
-                android:layout_marginLeft="@dimen/temp_tv_margin_left"
-                android:layout_toRightOf="@+id/weather_icon"
-                android:textSize="@dimen/temp_tv_size" />
+                <ImageView
+                    android:id="@+id/weather_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/weather_icon_margin_top" />
 
-            <TextView
-                android:id="@+id/condition_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/temperature_text_view"
-                android:layout_marginRight="@dimen/condition_tv_margin_right"
-                android:layout_marginTop="@dimen/condition_tv_margin_top"
-                android:textSize="@dimen/condition_tv_size" />
+                <TextView
+                    android:id="@+id/location_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/location_text_view_margin_left"
+                    android:layout_marginTop="@dimen/lacotion_text_view_margin_top"
+                    android:layout_toRightOf="@id/weather_icon"
+                    android:maxLines="1"
+                    android:textSize="@dimen/location_text_view_size"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/temperature_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/location_text_view"
+                    android:layout_marginLeft="@dimen/temp_tv_margin_left"
+                    android:layout_toRightOf="@+id/weather_icon"
+                    android:textSize="@dimen/temp_tv_size" />
+
+                <TextView
+                    android:id="@+id/condition_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/temperature_text_view"
+                    android:layout_marginRight="@dimen/condition_tv_margin_right"
+                    android:layout_marginTop="@dimen/condition_tv_margin_top"
+                    android:textSize="@dimen/condition_tv_size" />
             </RelativeLayout>
 
 

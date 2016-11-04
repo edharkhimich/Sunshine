@@ -1,12 +1,16 @@
 package com.example.appleeeee.myapplication.fragments;
 
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.appleeeee.myapplication.listeners.AppBarStateChangeListener;
 import com.example.appleeeee.myapplication.activity.MainActivity;
 import com.example.appleeeee.myapplication.R;
 import com.example.appleeeee.myapplication.adapter.ForecastAdapter;
@@ -51,19 +54,25 @@ public class MainFragment extends Fragment {
     ImageView weatherIcon;
     @BindView(R.id.my_recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.collapsing_layout)
+    CollapsingToolbarLayout collapsingToolbarLayout;
 
     private String conditionText;
     private String city;
     private String temperatureF;
-    private int temperatureC;
+    private int temperature;
     private String lastBuildDate;
     private String cityBundle;
     private String query;
     private List<Forecast> list;
     private ForecastAdapter adapter;
 
+   // public static final int REQUEST = 1000;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    private boolean isCelsiuos;
+  //  public static final String TEMP = "temperature";
 
     public MainFragment() {
     }
@@ -81,30 +90,61 @@ public class MainFragment extends Fragment {
         cityBundle = bundle.getString(CityFragment.KEY);
         query = "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"" + cityBundle + "\")";
 
-        AppBarLayout appBarLayout = (AppBarLayout) v.findViewById(R.id.weather_holder);
-        appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+       // ((MainActivity) getActivity()).getSupportActionBar().setTitle("Title");
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent)); // transperent color = #00000000
+        collapsingToolbarLayout.setCollapsedTitleTextColor(Color.parseColor("#FFFFFF")); //Color of your title
+        toolbar.setNavigationIcon(R.drawable.ic_action_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                if (state.name().equals("COLLAPSED")) {
-                    ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        setHasOptionsMenu(false);
+
+        AppBarLayout appBarLayout = (AppBarLayout) v.findViewById(R.id.weather_holder);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    isShow = true;
+                  //  collapsingToolbarLayout.setTitle("Your Title");
+                    collapsingToolbarLayout.setTitle("Title");
+
+                    //  ((MainActivity) getActivity()).getSupportActionBar().setTitle("Title");
                     setHasOptionsMenu(true);
-                    toolbar.setNavigationIcon(R.drawable.ic_action_back);
-                    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            getActivity().onBackPressed();
-                        }
-                    });
-                    // TODO setToolbarTitle()
-                } else if (state.name().equals("IDLE")) {
-                    toolbar.setTitle(" ");
-                    toolbar.setNavigationIcon(null);
+                } else if(isShow) {
+                   // ((MainActivity) getActivity()).getSupportActionBar().setTitle("");
+                    //collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
+                    isShow = false;
+                  //  setHasOptionsMenu(false);
                 }
             }
         });
 
         makingRequest();
         return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String temp = prefs.getString("list1", "default");
+        
+
+        Log.d("Settings", temp);
+
+        isCelsiuos = temp.equals("1");
     }
 
     @Override
@@ -121,7 +161,9 @@ public class MainFragment extends Fragment {
                 makingRequest();
                 break;
             case R.id.settings:
-                ((MainActivity)getActivity()).changeFragment(new SettingsFragment(), true);
+                SettingsFragment fragment = new SettingsFragment();
+             //   fragment.setTargetFragment(this, REQUEST);
+                ((MainActivity)getActivity()).changeFragment(fragment, true);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -166,17 +208,22 @@ public class MainFragment extends Fragment {
                                          lastBuildDate = response.body().getQuery().getResults().getChannel().getLastBuildDate();
                                          list = response.body().getQuery().getResults().getChannel().getItem().getForecast();
 //                                         formatTime();
-                                         temperatureC = (int) ((Integer.valueOf(temperatureF) - 32) / 1.8000);
+                                         if (isCelsiuos) {
+                                             temperature = (int) ((Integer.valueOf(temperatureF) - 32) / 1.8000);
+                                         } else {
+                                             temperature = (Integer.valueOf(temperatureF));
+                                         }
+
                                          if (city != null) {
                                              locationTv.setText(city);
                                          } else {
                                              locationTv.setText(R.string.unknown_location);
                                          }
-                                         if (temperatureF != null) {
-                                             temperatureTv.setText((temperatureC) + " \u00B0C");
-                                         } else {
-                                             temperatureTv.setText(R.string.unknown_temperature);
-                                         }
+                                        // if (temperature != 0) {
+                                             temperatureTv.setText((temperature) + " \u00B0C");
+                                        // } else {
+                                        //     temperatureTv.setText(R.string.unknown_temperature);
+                                        // }
                                          if (conditionText != null) {
                                              if (conditionText.equalsIgnoreCase("Scattered Showers")) {
                                                  weatherIcon.setImageResource(R.drawable.scattered_showers);
@@ -273,4 +320,17 @@ public class MainFragment extends Fragment {
                          }
                 );
     }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        Log.d("ManiFrag", "Code " + requestCode);
+//
+//        if(resultCode == Activity.RESULT_OK && requestCode == REQUEST){
+//            if(data.hasExtra(TEMP)){
+//                isCelsiuos = data.getBooleanExtra(TEMP, false);
+//            }
+//        }
+//
+//
+//    }
 }
