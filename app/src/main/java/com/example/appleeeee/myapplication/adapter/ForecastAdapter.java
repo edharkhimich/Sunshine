@@ -88,7 +88,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHo
             } else if (condition.equalsIgnoreCase("Sunny") || condition.equalsIgnoreCase("Fair (Day)")
                     || condition.equalsIgnoreCase("Hot")) {
                 holder.itemImage.setImageResource(R.drawable.ic_sunny);
-            } else if (condition.equalsIgnoreCase("fair (night)")) {
+            } else if (condition.equalsIgnoreCase("Fair (night)")) {
                 holder.itemImage.setImageResource(R.drawable.ic_fair_night);
             } else if (condition.equalsIgnoreCase("Isolated Thunderstorms") || condition.equalsIgnoreCase("Scattered Thunderstorms")
                     || condition.equalsIgnoreCase("Scattered Showers")) {

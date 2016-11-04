@@ -1,13 +1,16 @@
 package com.example.appleeeee.myapplication.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -69,11 +72,10 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ((MainActivity) getActivity()).showProgress();
-        View v = inflater.inflate(R.layout.main_fragment, container, false);
+        View v = inflater.inflate(R.layout.fragment_main, container, false);
 
         JodaTimeAndroid.init(getActivity());
         ButterKnife.bind(this, v);
-
 
         Bundle bundle = this.getArguments();
         cityBundle = bundle.getString(CityFragment.KEY);
@@ -86,20 +88,17 @@ public class MainFragment extends Fragment {
                 if (state.name().equals("COLLAPSED")) {
                     ((MainActivity) getActivity()).setSupportActionBar(toolbar);
                     setHasOptionsMenu(true);
-
                     toolbar.setNavigationIcon(R.drawable.ic_action_back);
-
                     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             getActivity().onBackPressed();
                         }
                     });
-                    toolbar.setTitle(getString(R.string.weather_in) + cityBundle);
-                } else if (state.name().equals(State.IDLE)) {
-                    toolbar.setTitle(null);
+                    // TODO setToolbarTitle()
+                } else if (state.name().equals("IDLE")) {
+                    toolbar.setTitle(" ");
                     toolbar.setNavigationIcon(null);
-                    setHasOptionsMenu(false);
                 }
             }
         });
@@ -120,7 +119,10 @@ public class MainFragment extends Fragment {
                 getActivity().onBackPressed();
             case R.id.refresh:
                 makingRequest();
-                return true;
+                break;
+            case R.id.settings:
+                ((MainActivity)getActivity()).changeFragment(new SettingsFragment(), true);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

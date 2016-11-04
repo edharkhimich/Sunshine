@@ -29,7 +29,7 @@ public class CityFragment extends Fragment {
 
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.city_fragment, container, false);
+        View v = inflater.inflate(R.layout.fragment_city, container, false);
         unbinder = ButterKnife.bind(this, v);
         cityEditText.requestFocus();
         return v;
