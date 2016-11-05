@@ -1,11 +1,14 @@
 package com.example.appleeeee.myapplication.fragments;
 
 
-import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -34,6 +37,8 @@ import com.example.appleeeee.myapplication.model.Model;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 import butterknife.BindView;
@@ -66,13 +71,14 @@ public class MainFragment extends Fragment {
     private String query;
     private List<Forecast> list;
     private ForecastAdapter adapter;
-
-   // public static final int REQUEST = 1000;
+    View rootView;
+    private static Bitmap bitmap;
+    private static File file;
+    private static final String TYPE = "image/*";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    private boolean isCelsiuos;
-  //  public static final String TEMP = "temperature";
+    public static boolean isCelsiuos;
 
     public MainFragment() {
     }
@@ -86,12 +92,14 @@ public class MainFragment extends Fragment {
         JodaTimeAndroid.init(getActivity());
         ButterKnife.bind(this, v);
 
+        rootView = getActivity().getWindow().getDecorView()
+                .findViewById(android.R.id.content);
+
         Bundle bundle = this.getArguments();
         cityBundle = bundle.getString(CityFragment.KEY);
         query = "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"" + cityBundle + "\")";
 
         ((MainActivity) getActivity()).setSupportActionBar(toolbar);
-       // ((MainActivity) getActivity()).getSupportActionBar().setTitle("Title");
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent)); // transperent color = #00000000
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.parseColor("#FFFFFF")); //Color of your title
         toolbar.setNavigationIcon(R.drawable.ic_action_back);
@@ -102,7 +110,7 @@ public class MainFragment extends Fragment {
             }
         });
 
-        setHasOptionsMenu(false);
+
 
         AppBarLayout appBarLayout = (AppBarLayout) v.findViewById(R.id.weather_holder);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -116,16 +124,12 @@ public class MainFragment extends Fragment {
                 }
                 if (scrollRange + verticalOffset == 0) {
                     isShow = true;
-                  //  collapsingToolbarLayout.setTitle("Your Title");
-                    collapsingToolbarLayout.setTitle("Title");
+                    toolbar.setTitle("Title");
 
-                    //  ((MainActivity) getActivity()).getSupportActionBar().setTitle("Title");
                     setHasOptionsMenu(true);
-                } else if(isShow) {
-                   // ((MainActivity) getActivity()).getSupportActionBar().setTitle("");
-                    //collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
+                } else if (isShow) {
                     isShow = false;
-                  //  setHasOptionsMenu(false);
+                    setHasOptionsMenu(false);
                 }
             }
         });
@@ -138,18 +142,17 @@ public class MainFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
         String temp = prefs.getString("list1", "default");
-        
-
-        Log.d("Settings", temp);
 
         isCelsiuos = temp.equals("1");
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.forecast_fragment, menu);
+        inflater.inflate(R.menu.menu_ortions, menu);
+
     }
 
     @Override
@@ -161,13 +164,59 @@ public class MainFragment extends Fragment {
                 makingRequest();
                 break;
             case R.id.settings:
-                SettingsFragment fragment = new SettingsFragment();
-             //   fragment.setTargetFragment(this, REQUEST);
-                ((MainActivity)getActivity()).changeFragment(fragment, true);
+                ((MainActivity) getActivity()).changeFragment(new SettingsFragment(), true);
                 break;
+            case R.id.share:
+                getScreenShot(rootView);
+                store(bitmap, "weather screenshoot");
+                shareImage(file);
+
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public static Bitmap getScreenShot(View view) {
+        View screenView = view.getRootView();
+        screenView.setDrawingCacheEnabled(true);
+        bitmap = Bitmap.createBitmap(screenView.getDrawingCache());
+        screenView.setDrawingCacheEnabled(false);
+        return bitmap;
+    }
+
+    public static void store(Bitmap bm, String fileName){
+        final String dirPath = Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + "/Screenshots";
+        File dir = new File(dirPath);
+        if(!dir.exists())
+            dir.mkdirs();
+        file = new File(dirPath, fileName);
+        try {
+            FileOutputStream fOut = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+            fOut.flush();
+            fOut.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void shareImage(File file){
+        Uri uri = Uri.fromFile(file);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType(TYPE);
+
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        try {
+            startActivity(Intent.createChooser(intent, "Share Screenshot"));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getActivity(), "No App Available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
 //    private void formatTime() {
 //        DateTime dt = new DateTime();
@@ -210,8 +259,11 @@ public class MainFragment extends Fragment {
 //                                         formatTime();
                                          if (isCelsiuos) {
                                              temperature = (int) ((Integer.valueOf(temperatureF) - 32) / 1.8000);
+                                             temperatureTv.setText((temperature) + " \u00B0C");
                                          } else {
                                              temperature = (Integer.valueOf(temperatureF));
+                                             temperatureTv.setText((temperature) + " \u00B0F");
+
                                          }
 
                                          if (city != null) {
@@ -219,11 +271,7 @@ public class MainFragment extends Fragment {
                                          } else {
                                              locationTv.setText(R.string.unknown_location);
                                          }
-                                        // if (temperature != 0) {
-                                             temperatureTv.setText((temperature) + " \u00B0C");
-                                        // } else {
-                                        //     temperatureTv.setText(R.string.unknown_temperature);
-                                        // }
+
                                          if (conditionText != null) {
                                              if (conditionText.equalsIgnoreCase("Scattered Showers")) {
                                                  weatherIcon.setImageResource(R.drawable.scattered_showers);
@@ -320,17 +368,4 @@ public class MainFragment extends Fragment {
                          }
                 );
     }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        Log.d("ManiFrag", "Code " + requestCode);
-//
-//        if(resultCode == Activity.RESULT_OK && requestCode == REQUEST){
-//            if(data.hasExtra(TEMP)){
-//                isCelsiuos = data.getBooleanExtra(TEMP, false);
-//            }
-//        }
-//
-//
-//    }
 }

@@ -21,9 +21,7 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref1);
-
-        //Button button = getActivity().fin
-        //Don't work toolbar
+        
         Toolbar toolbar = ((MainActivity)getActivity()).getToolbar();
         ((MainActivity)getActivity()).setSupportActionBar(toolbar);
         ((MainActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);

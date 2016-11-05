@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.appleeeee.myapplication.R;
+import com.example.appleeeee.myapplication.fragments.MainFragment;
 import com.example.appleeeee.myapplication.model.Forecast;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHolder>{
+public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHolder> {
 
     List<Forecast> forecastList;
     Context context;
@@ -28,14 +29,14 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHo
     private int temperatureLowC;
     private String condition;
 
-    public ForecastAdapter(Context context){
+    public ForecastAdapter(Context context) {
         this.context = context;
         forecastList = new ArrayList<>();
     }
 
     @Override
     public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ItemHolder(LayoutInflater.from(context).inflate(R.layout.item,parent,false));
+        return new ItemHolder(LayoutInflater.from(context).inflate(R.layout.item, parent, false));
     }
 
     @Override
@@ -46,10 +47,48 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHo
         temperatureHighC = (int) ((Integer.valueOf(temperatureHighF) - 32) / 1.8000);
         temperatureLowC = (int) ((Integer.valueOf(temperatureLowF) - 32) / 1.8000);
         condition = forecast.getText();
+        putImageToHolder(holder);
         holder.condition.setText(forecast.getText());
         holder.day.setText(forecast.getDate());
-        holder.tempHigh.setText(String.valueOf(temperatureHighC) + " \u00B0C");
-        holder.tempLow.setText(String.valueOf(temperatureLowC) + " \u00B0C");
+        if (MainFragment.isCelsiuos) {
+            holder.tempHigh.setText(String.valueOf(temperatureHighC) + " \u00B0C");
+            holder.tempLow.setText(String.valueOf(temperatureLowC) + " \u00B0C");
+        } else {
+            holder.tempHigh.setText(temperatureHighF + " \u00B0F");
+            holder.tempLow.setText(temperatureLowF + " \u00B0F");
+        }
+    }
+
+
+    @Override
+    public int getItemCount() {
+        return forecastList.size();
+    }
+
+    public class ItemHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.item_image)
+        ImageView itemImage;
+        @BindView(R.id.day)
+        TextView day;
+        @BindView(R.id.condition)
+        TextView condition;
+        @BindView(R.id.temp_high)
+        TextView tempHigh;
+        @BindView(R.id.temp_low)
+        TextView tempLow;
+
+        public ItemHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    public void setList(List<Forecast> list) {
+        this.forecastList = list;
+        notifyItemRangeChanged(0, forecastList.size());
+    }
+
+    private void putImageToHolder(ItemHolder holder) {
         if (!condition.isEmpty()) {
             if (condition.equals("Scattered Showers")) {
                 holder.itemImage.setImageResource(R.drawable.ic_light_rain);
@@ -81,7 +120,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHo
                 holder.itemImage.setImageResource(R.drawable.ic_hail);
             } else if (condition.equalsIgnoreCase("Dust")) {
                 holder.itemImage.setImageResource(R.drawable.ic_dust);
-            } else if (condition.equalsIgnoreCase("Blustery") || condition.equalsIgnoreCase("Windy")){
+            } else if (condition.equalsIgnoreCase("Blustery") || condition.equalsIgnoreCase("Windy")) {
                 holder.itemImage.setImageResource(R.drawable.ic_wind);
             } else if (condition.equalsIgnoreCase("Clear (Night)")) {
                 holder.itemImage.setImageResource(R.drawable.ic_clear);
@@ -98,27 +137,5 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHo
             }
         }
     }
-
-    public void setList(List<Forecast> list){
-        this.forecastList = list;
-        notifyItemRangeChanged(0, forecastList.size());
-    }
-
-    @Override
-    public int getItemCount() {
-        return forecastList.size();
-    }
-
-    public class ItemHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.item_image) ImageView itemImage;
-        @BindView(R.id.day) TextView day;
-        @BindView(R.id.condition) TextView condition;
-        @BindView(R.id.temp_high) TextView tempHigh;
-        @BindView(R.id.temp_low) TextView tempLow;
-
-        public ItemHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
 }
+
