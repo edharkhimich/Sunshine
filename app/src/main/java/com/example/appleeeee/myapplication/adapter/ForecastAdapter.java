@@ -99,7 +99,8 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHo
                     || condition.equalsIgnoreCase("Severe Thunderstorms") || condition.equalsIgnoreCase("Thundershowers")) {
                 holder.itemImage.setImageResource(R.drawable.ic_storm);
             } else if (condition.equalsIgnoreCase("Mixed Rain And Snow") || condition.equalsIgnoreCase("Mixed Rain And Sleet")
-                    || condition.equalsIgnoreCase("Mixed Snow And Sleet") || condition.equalsIgnoreCase("Mixed Rain And Hail")) {
+                    || condition.equalsIgnoreCase("Mixed Snow And Sleet") || condition.equalsIgnoreCase("Mixed Rain And Hail")
+                    || condition.equalsIgnoreCase("Rain and Snow")) {
                 holder.itemImage.setImageResource(R.drawable.ic_rain_snow);
             } else if (condition.equalsIgnoreCase("Partly Cloudy")) {
                 holder.itemImage.setImageResource(R.drawable.ic_light_clouds);
