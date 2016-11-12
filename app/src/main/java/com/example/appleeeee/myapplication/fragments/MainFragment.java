@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -59,6 +58,8 @@ public class MainFragment extends Fragment {
     ImageView weatherIcon;
     @BindView(R.id.my_recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.toolbar_logo)
+    ImageView toolbarLogo;
     @BindView(R.id.collapsing_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
 
@@ -100,8 +101,9 @@ public class MainFragment extends Fragment {
         query = "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"" + cityBundle + "\")";
 
         ((MainActivity) getActivity()).setSupportActionBar(toolbar);
-        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent)); // transperent color = #00000000
-        collapsingToolbarLayout.setCollapsedTitleTextColor(Color.parseColor("#FFFFFF")); //Color of your title
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(null);
+//        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent)); // transperent color = #00000000
+//        collapsingToolbarLayout.setCollapsedTitleTextColor(Color.parseColor("#FFFFFF")); //Color of your title
         toolbar.setNavigationIcon(R.drawable.ic_action_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +113,6 @@ public class MainFragment extends Fragment {
         });
 
 
-
         AppBarLayout appBarLayout = (AppBarLayout) v.findViewById(R.id.weather_holder);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
@@ -119,23 +120,30 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                Log.d("mLogs", String.valueOf(verticalOffset));
                 if (scrollRange == -1) {
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset == 0) {
                     isShow = true;
-                    toolbar.setTitle("Title");
-
+                    toolbarLogo.setImageResource(R.drawable.ic_logo);
                     setHasOptionsMenu(true);
+
                 } else if (isShow) {
                     isShow = false;
                     setHasOptionsMenu(false);
+                    toolbarLogo.setImageResource(0);
                 }
             }
         });
 
         makingRequest();
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_options, menu);
     }
 
     @Override
@@ -147,12 +155,6 @@ public class MainFragment extends Fragment {
         String temp = prefs.getString("list1", "default");
 
         isCelsiuos = temp.equals("1");
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_ortions, menu);
-
     }
 
     @Override
@@ -170,7 +172,6 @@ public class MainFragment extends Fragment {
                 getScreenShot(rootView);
                 store(bitmap, "weather screenshoot");
                 shareImage(file);
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -183,11 +184,11 @@ public class MainFragment extends Fragment {
         return bitmap;
     }
 
-    public static void store(Bitmap bm, String fileName){
+    public static void store(Bitmap bm, String fileName) {
         final String dirPath = Environment.getExternalStorageDirectory()
                 .getAbsolutePath() + "/Screenshots";
         File dir = new File(dirPath);
-        if(!dir.exists())
+        if (!dir.exists())
             dir.mkdirs();
         file = new File(dirPath, fileName);
         try {
@@ -200,7 +201,7 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private void shareImage(File file){
+    private void shareImage(File file) {
         Uri uri = Uri.fromFile(file);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
@@ -215,7 +216,6 @@ public class MainFragment extends Fragment {
             Toast.makeText(getActivity(), "No App Available", Toast.LENGTH_SHORT).show();
         }
     }
-
 
 
 //    private void formatTime() {

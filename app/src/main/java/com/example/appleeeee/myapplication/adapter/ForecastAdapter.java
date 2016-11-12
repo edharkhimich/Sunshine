@@ -1,15 +1,19 @@
 package com.example.appleeeee.myapplication.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.appleeeee.myapplication.R;
+import com.example.appleeeee.myapplication.activity.MainActivity;
 import com.example.appleeeee.myapplication.fragments.MainFragment;
+import com.example.appleeeee.myapplication.fragments.WeatherForDayFragment;
 import com.example.appleeeee.myapplication.model.Forecast;
 
 import java.util.ArrayList;
@@ -20,6 +24,9 @@ import butterknife.ButterKnife;
 
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHolder> {
 
+    public static final String HIGH_TEMP_KEY = "093";
+    public static final String LOW_TEMP_KEY = "092";
+
     List<Forecast> forecastList;
     Context context;
     Forecast forecast;
@@ -28,6 +35,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHo
     private int temperatureHighC;
     private int temperatureLowC;
     private String condition;
+    String thigh;
 
     public ForecastAdapter(Context context) {
         this.context = context;
@@ -57,6 +65,9 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHo
             holder.tempHigh.setText(temperatureHighF + " \u00B0F");
             holder.tempLow.setText(temperatureLowF + " \u00B0F");
         }
+        holder.setOnClick(holder);
+
+
     }
 
 
@@ -66,6 +77,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHo
     }
 
     public class ItemHolder extends RecyclerView.ViewHolder {
+
         @BindView(R.id.item_image)
         ImageView itemImage;
         @BindView(R.id.day)
@@ -76,10 +88,28 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHo
         TextView tempHigh;
         @BindView(R.id.temp_low)
         TextView tempLow;
+        @BindView(R.id.item_full)
+        RelativeLayout itemFull;
 
         public ItemHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+
+        public void setOnClick(final ItemHolder holder) {
+
+            itemFull.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    WeatherForDayFragment dayWeatherFragment = new WeatherForDayFragment();
+                    bundle.putString(HIGH_TEMP_KEY, String.valueOf(holder.tempHigh.getText()));
+                    bundle.putString(LOW_TEMP_KEY, String.valueOf(holder.tempLow.getText()));
+                    dayWeatherFragment.setArguments(bundle);
+                    ((MainActivity)context).changeFragment(dayWeatherFragment, true);
+                }
+            });
         }
     }
 
@@ -139,4 +169,5 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHo
         }
     }
 }
+
 
