@@ -29,13 +29,23 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
 
     static final String DATABASE_NAME = "weather.db";
+    static final String LOCATION_NAME = "location.db";
 
     public WeatherDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        final String SQL_CREATE_LOCATION_TABLE = "CREATE TABLE " + WeatherContract.LocationEntry.TABLE_NAME + " (" +
+                WeatherContract.LocationEntry._ID + " INTEGER PRIMARY KEY," +
+                WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " TEXT UNIQUE NOTT NULL," +
+                WeatherContract.LocationEntry.COLUMN_CITY_NAME + " TEXT NOT NULL," +
+                WeatherContract.LocationEntry.COLUMN_COORD_LAT + " REAL NOT NULL," +
+                WeatherContract.LocationEntry.COLUMN_COORD_LONG + " REAL NOT NULL,);";
+
         final String SQL_CREATE_WEATHER_TABLE = "CREATE TABLE " + WeatherContract.WeatherEntry.TABLE_NAME + " (" +
                 // Why AutoIncrement here, and not above?
                 // Unique keys will be auto-generated in either case.  But for weather

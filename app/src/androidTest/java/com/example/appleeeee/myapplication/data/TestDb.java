@@ -15,7 +15,12 @@
  */
 package com.example.appleeeee.myapplication.data;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
+
+import com.example.appleeeee.myapplication.model.Location;
 
 public class TestDb extends AndroidTestCase {
 
@@ -106,24 +111,30 @@ public class TestDb extends AndroidTestCase {
         where you can uncomment out the "createNorthPoleLocationValues" function.  You can
         also make use of the ValidateCurrentRecord function from within TestUtilities.
     */
-    public void testLocationTable() {
-        // First step: Get reference to writable database
+    public long testLocationTable() {
 
-        // Create ContentValues of what you want to insert
-        // (you can use the createNorthPoleLocationValues if you wish)
+        WeatherDbHelper weatherDbHelper = new WeatherDbHelper(mContext);
+        SQLiteDatabase sqLiteDatabase = weatherDbHelper.getWritableDatabase();
 
-        // Insert ContentValues into database and get a row ID back
+        ContentValues contentValues = TestUtilities.createNorthPoleLocationValues();
 
-        // Query the database and receive a Cursor back
+        long locationRowId = sqLiteDatabase.insert(WeatherContract.LocationEntry.TABLE_NAME, null, contentValues);
 
-        // Move the cursor to a valid database row
+        assertTrue(locationRowId!=-1);
 
-        // Validate data in resulting Cursor with the original ContentValues
-        // (you can use the validateCurrentRecord function in TestUtilities to validate the
-        // query if you like)
+        Cursor cursor = sqLiteDatabase.query(WeatherContract.LocationEntry.TABLE_NAME,
+                null, null, null, null, null, null);
 
-        // Finally, close the cursor and database
+        assertTrue("No data from location", cursor.moveToFirst());
 
+        TestUtilities.validateCurrentRecord("Location query validation failed", cursor, contentValues);
+
+        assertFalse("More than one data returned from location query", cursor.moveToNext());
+
+        cursor.close();
+        sqLiteDatabase.close();
+
+        return locationRowId;
     }
 
     /*
@@ -166,6 +177,27 @@ public class TestDb extends AndroidTestCase {
         testWeatherTable and testLocationTable.
      */
     public long insertLocation() {
-        return -1L;
+
+        long locationRowId = insertLocation();
+
+        ContentValues weatherValues = TestUtilities.createWeatherValues(locationRowId);
+
+        WeatherDbHelper dbHelper = new WeatherDbHelper(mContext);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        long weatherRowId = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, weatherValues);
+
+        Cursor weatherCursor = db.query(
+                WeatherContract.WeatherEntry.TABLE_NAME,
+                null, null, null, null, null, null);
+
+        TestUtilities.validateCurrentRecord("testInsertReadDb weatherEntry failed to validate",
+                weatherCursor, weatherValues);
+
+        weatherCursor.close();
+        dbHelper.close();
+
+        return weatherRowId;
     }
 }
