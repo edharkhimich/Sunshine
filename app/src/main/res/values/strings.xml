@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Sunshine App</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_location">Map location</string>
+    <string name="action_share">Share</string>
+
+    <string name="pref_location_label">Location</string>
+    <string name="pref_location_key">location</string>
+    <string name="pref_location_default">Cherkasy</string>
+
+    <string name="pref_units_label">Temperature units</string>
+    <string name="pref_units_key">units</string>
+    <string name="pref_units_default">metric</string>
+
+    <string name="pref_units_label_metric">Metric</string>
+
+    <string name="pref_units_label_imperial">Imperial</string>
+
+    <string name="pref_units_metric" translatable="false">metric</string>
+
+    <string name="pref_units_imperial" translatable="false">imperial</string>
+
+    <array name="pref_unit_entries">
+        <item>Metric</item>
+        <item>Imperial</item>
+    </array>
+    
+    <array name="pref_unit_entries_values">
+        <item>metric</item>
+        <item>imperial</item>
+    </array>
+</resources>
