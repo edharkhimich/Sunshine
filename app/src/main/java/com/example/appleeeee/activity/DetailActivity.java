@@ -47,8 +47,6 @@ public class DetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
     public static class DetailFragment extends Fragment {
 
         final String FORECAST_SHARE = "#SusnhineApp";
