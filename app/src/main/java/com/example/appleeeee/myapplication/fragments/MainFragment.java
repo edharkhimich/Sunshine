@@ -46,6 +46,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.support.v7.appcompat.R.styleable.Toolbar;
+
 public class MainFragment extends Fragment {
 
     @BindView(R.id.location_text_view)
