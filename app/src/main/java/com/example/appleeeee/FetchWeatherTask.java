@@ -86,6 +86,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             locationId = locationCursor.getLong(locationIdIndex);
         } else {
             ContentValues locationValues = new ContentValues();
+
             locationValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, cityName);
             locationValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, locationSetting);
             locationValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, lat);
@@ -95,10 +96,11 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
                     WeatherContract.LocationEntry.CONTENT_URI,
                     locationValues
             );
+
             locationId = ContentUris.parseId(insertedUri);
         }
-        locationCursor.close();
 
+        locationCursor.close();
         return locationId;
     }
 
@@ -125,8 +127,10 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         final String OWM_CITY_NAME = "name";
         final String OWM_COORD = "coord";
 
+        // Location coordinate
         final String OWM_LATITUDE = "lat";
         final String OWM_LONGITUDE = "lon";
+
         final String OWM_LIST = "list";
 
         final String OWM_PRESSURE = "pressure";
@@ -221,11 +225,12 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             Uri weatherForLocationUri = WeatherEntry.buildWeatherLocationWithStartDate(
                     locationSetting, System.currentTimeMillis());
 
+
             Cursor cur = mContext.getContentResolver().query(weatherForLocationUri,
                     null, null, null, sortOrder);
 
             cVVector = new Vector<ContentValues>(cur.getCount());
-            if (cur.moveToFirst()) {
+            if ( cur.moveToFirst() ) {
                 do {
                     ContentValues cv = new ContentValues();
                     DatabaseUtils.cursorRowToContentValues(cur, cv);
