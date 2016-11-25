@@ -2,6 +2,8 @@ package com.example.appleeeee.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -15,15 +17,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.appleeeee.FetchWeatherTask;
+import com.example.appleeeee.adapter.ForecastAdapter;
+import com.example.appleeeee.data.WeatherContract;
+import com.example.appleeeee.other.FetchWeatherTask;
 import com.example.appleeeee.R;
 import com.example.appleeeee.activity.DetailActivity;
+import com.example.appleeeee.other.Utility;
 
 import java.util.ArrayList;
 
 public class ForecastFragment extends Fragment {
 
-    ArrayAdapter<String> forecastAdapter;
+    ForecastAdapter mForecastAdapter;
 
     public ForecastFragment() {
     }
@@ -58,18 +63,16 @@ public class ForecastFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        forecastAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, new ArrayList<String>());
+        String locationSetting = Utility.getPreferredLocation(getActivity());
+        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry
+                .buildWeatherLocationWithStartDate(locationSetting, System.currentTimeMillis());
+        Cursor cur = getActivity().getContentResolver().query(weatherForLocationUri, null, null, null, sortOrder);
+        mForecastAdapter = new ForecastAdapter(getActivity(), cur, 0);
         ListView listView = (ListView) view.findViewById(R.id.listview_forecast);
-        listView.setAdapter(forecastAdapter);
+        listView.setAdapter(mForecastAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), DetailActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, forecastAdapter.getItem(i));
-                startActivity(intent);
-            }
-        });
+
     }
 
     @Override
@@ -79,8 +82,9 @@ public class ForecastFragment extends Fragment {
     }
 
     public void updateWeather() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        new FetchWeatherTask(getContext(), forecastAdapter).execute(sharedPreferences.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default)));
+        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
+        String location = Utility.getPreferredLocation(getActivity());
+        weatherTask.execute(location);
     }
 }
 

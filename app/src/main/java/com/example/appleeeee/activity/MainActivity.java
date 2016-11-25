@@ -1,16 +1,15 @@
 package com.example.appleeeee.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.appleeeee.R;
 import com.example.appleeeee.fragment.ForecastFragment;
+import com.example.appleeeee.other.Utility;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,8 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void openPreferredLocationInMap() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String location = sharedPreferences.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+        String location = Utility.getPreferredLocation(this);
         Uri uri = Uri.parse("geo:0,0?").buildUpon()
                 .appendQueryParameter("q", location)
                 .build();
@@ -56,5 +54,6 @@ public class MainActivity extends AppCompatActivity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
+
     }
 }

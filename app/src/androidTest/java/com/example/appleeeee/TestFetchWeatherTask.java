@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.test.AndroidTestCase;
 
 import com.example.appleeeee.data.WeatherContract;
+import com.example.appleeeee.other.FetchWeatherTask;
 
 public class TestFetchWeatherTask extends AndroidTestCase {
     static final String ADD_LOCATION_SETTING = "Sunnydale, CA";
@@ -18,7 +19,7 @@ public class TestFetchWeatherTask extends AndroidTestCase {
                 WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
                 new String[]{ADD_LOCATION_SETTING});
 
-        FetchWeatherTask fwt = new FetchWeatherTask(getContext(), null);
+        FetchWeatherTask fwt = new FetchWeatherTask(getContext());
         long locationId = fwt.addLocation(ADD_LOCATION_SETTING, ADD_LOCATION_CITY,
                 ADD_LOCATION_LAT, ADD_LOCATION_LON);
 
