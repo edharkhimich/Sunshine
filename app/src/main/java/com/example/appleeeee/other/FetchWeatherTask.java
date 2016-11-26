@@ -1,7 +1,5 @@
 package com.example.appleeeee.other;
 
-
-import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,7 +10,6 @@ import android.os.Build;
 import android.text.format.Time;
 import android.util.Log;
 
-import com.example.appleeeee.BuildConfig;
 import com.example.appleeeee.data.WeatherContract;
 
 import org.json.JSONArray;
@@ -29,7 +26,6 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Vector;
 
-@TargetApi(Build.VERSION_CODES.CUPCAKE)
 public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
 
     private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
@@ -100,27 +96,16 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
-    @TargetApi(Build.VERSION_CODES.CUPCAKE)
+
     private void getWeatherDataFromJson(String forecastJsonStr,
                                         String locationSetting)
             throws JSONException {
 
-        // Now we have a String representing the complete forecast in JSON Format.
-        // Fortunately parsing is easy:  constructor takes the JSON string and converts it
-        // into an Object hierarchy for us.
-
-        // These are the names of the JSON objects that need to be extracted.
-
-        // Location information
         final String OWM_CITY = "city";
         final String OWM_CITY_NAME = "name";
         final String OWM_COORD = "coord";
-
-        // Location coordinate
         final String OWM_LATITUDE = "lat";
         final String OWM_LONGITUDE = "lon";
-
-        // Weather information.  Each day's forecast info is an element of the "list" array.
         final String OWM_LIST = "list";
 
         final String OWM_PRESSURE = "pressure";
@@ -128,7 +113,6 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
         final String OWM_WINDSPEED = "speed";
         final String OWM_WIND_DIRECTION = "deg";
 
-        // All temperatures are children of the "temp" object.
         final String OWM_TEMPERATURE = "temp";
         final String OWM_MAX = "max";
         final String OWM_MIN = "min";
@@ -150,28 +134,16 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
 
             long locationId = addLocation(locationSetting, cityName, cityLatitude, cityLongitude);
 
-            // Insert the new weather information into the database
             Vector<ContentValues> cVVector = new Vector<ContentValues>(weatherArray.length());
-
-            // OWM returns daily forecasts based upon the local time of the city that is being
-            // asked for, which means that we need to know the GMT offset to translate this data
-            // properly.
-
-            // Since this data is also sent in-order and the first day is always the
-            // current day, we're going to take advantage of that to get a nice
-            // normalized UTC date for all of our weather.
 
             Time dayTime = new Time();
             dayTime.setToNow();
 
-            // we start at the day returned by local time. Otherwise this is a mess.
             int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
 
-            // now we work exclusively in UTC
             dayTime = new Time();
 
             for (int i = 0; i < weatherArray.length(); i++) {
-                // These are the values that will be collected.
                 long dateTime;
                 double pressure;
                 int humidity;
@@ -184,10 +156,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
                 String description;
                 int weatherId;
 
-                // Get the JSON object representing the day
                 JSONObject dayForecast = weatherArray.getJSONObject(i);
 
-                // Cheating to convert this to UTC time, which is what we want anyhow
                 dateTime = dayTime.setJulianDay(julianStartDay + i);
 
                 pressure = dayForecast.getDouble(OWM_PRESSURE);
@@ -195,15 +165,11 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
                 windSpeed = dayForecast.getDouble(OWM_WINDSPEED);
                 windDirection = dayForecast.getDouble(OWM_WIND_DIRECTION);
 
-                // Description is in a child array called "weather", which is 1 element long.
-                // That element also contains a weather code.
                 JSONObject weatherObject =
                         dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
                 description = weatherObject.getString(OWM_DESCRIPTION);
                 weatherId = weatherObject.getInt(OWM_WEATHER_ID);
 
-                // Temperatures are in a child object called "temp".  Try not to name variables
-                // "temp" when working with temperature.  It confuses everybody.
                 JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
                 high = temperatureObject.getDouble(OWM_MAX);
                 low = temperatureObject.getDouble(OWM_MIN);
@@ -317,8 +283,6 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
             // to parse it.
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
-            e.printStackTrace();
-        } catch (ProtocolException e) {
             e.printStackTrace();
         } finally {
             if (urlConnection != null) {

@@ -36,7 +36,8 @@
         
         <provider
             android:authorities="com.example.appleeeee"
-            android:name="com.example.appleeeee.data.WeatherProvider"/>
+            android:name="com.example.appleeeee.data.WeatherProvider"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
-
 </manifest>
