@@ -343,8 +343,7 @@ public class MainFragment extends Fragment {
                                                      || conditionText.equalsIgnoreCase("Snow Flurries")
                                                      || conditionText.equalsIgnoreCase("Light Snow Showers")
                                                      || conditionText.equalsIgnoreCase("Blowing Snow")
-                                                     || conditionText.equalsIgnoreCase("Sleet")
-                                                     || conditionText.equalsIgnoreCase("Rain and Snow")) {
+                                                     || conditionText.equalsIgnoreCase("Sleet")) {
                                                  weatherIcon.setImageResource(R.drawable.snow);
                                              } else {
                                                  weatherIcon.setImageResource(R.drawable.na);

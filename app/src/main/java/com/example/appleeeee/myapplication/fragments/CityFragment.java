@@ -20,8 +20,8 @@ import butterknife.Unbinder;
 
 public class CityFragment extends Fragment {
 
-    @BindView(R.id.city_edit_text)
-    EditText cityEditText;
+//    @BindView(R.id.city_edit_text)
+//    EditText cityEditText;
 
     private String userCity;
     private Unbinder unbinder;
@@ -31,13 +31,13 @@ public class CityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_city, container, false);
         unbinder = ButterKnife.bind(this, v);
-        cityEditText.requestFocus();
+//        cityEditText.requestFocus();
         return v;
     }
 
     @Override
     public void onResume() {
-        cityEditText.setText(null);
+//        cityEditText.setText(null);
         super.onResume();
     }
 
@@ -46,22 +46,22 @@ public class CityFragment extends Fragment {
         unbinder.unbind();
         super.onDestroyView();
     }
-
-    @OnClick(R.id.submit_btn)
-    public void submitClick(View view) {
-        userCity = cityEditText.getText().toString();
-
-        if (MainActivity.isConn(getActivity())) {
-            if (!userCity.isEmpty()) {
-                Bundle bundle = new Bundle();
-                bundle.putString(KEY, userCity);
-                MainFragment mainFragment = new MainFragment();
-                mainFragment.setArguments(bundle);
-                ((MainActivity) getActivity()).changeFragment(mainFragment, true);
-
-            } else {
-                Toast.makeText(getActivity(), getString(R.string.enter_city), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
+//
+//    @OnClick(R.id.submit_btn)
+//    public void submitClick(View view) {
+//        userCity = cityEditText.getText().toString();
+//
+//        if (MainActivity.isConn(getActivity())) {
+//            if (!userCity.isEmpty()) {
+//                Bundle bundle = new Bundle();
+//                bundle.putString(KEY, userCity);
+//                MainFragment mainFragment = new MainFragment();
+//                mainFragment.setArguments(bundle);
+//                ((MainActivity) getActivity()).changeFragment(mainFragment, true);
+//
+//            } else {
+//                Toast.makeText(getActivity(), getString(R.string.enter_city), Toast.LENGTH_LONG).show();
+//            }
+//        }
+//    }
 }

@@ -13,18 +13,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/UserTheme">
-        <activity android:name=".activity.MainActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <provider
-            android:authorities="com.example.appleeeee.myapplication"
-            android:name=".provider.WeatherProvider"/>
-
     </application>
 </manifest>
