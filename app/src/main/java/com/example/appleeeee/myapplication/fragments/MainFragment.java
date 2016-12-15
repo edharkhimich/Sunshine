@@ -46,8 +46,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.support.v7.appcompat.R.styleable.Toolbar;
-
 public class MainFragment extends Fragment {
 
     @BindView(R.id.location_text_view)
@@ -276,67 +274,67 @@ public class MainFragment extends Fragment {
 
                                          if (conditionText != null) {
                                              if (conditionText.equalsIgnoreCase("Scattered Showers")) {
-                                                 weatherIcon.setImageResource(R.drawable.scattered_showers);
+                                                 weatherIcon.setImageResource(R.drawable.image_scattered_showers);
                                              } else if (conditionText.equalsIgnoreCase("Showers")
                                                      || conditionText.equalsIgnoreCase("Rain")
                                                      || conditionText.equalsIgnoreCase("Mixed Rain And Hail")) {
-                                                 weatherIcon.setImageResource(R.drawable.rain);
+                                                 weatherIcon.setImageResource(R.drawable.image_rain);
                                              } else if (conditionText.equalsIgnoreCase("Tornado")
                                                      || conditionText.equalsIgnoreCase("Tropical Storm")
                                                      || conditionText.equalsIgnoreCase("Hurricane")
                                                      || conditionText.equalsIgnoreCase("Severe Thunderstorms")
                                                      || conditionText.equalsIgnoreCase("Thunderstorms")) {
-                                                 weatherIcon.setImageResource(R.drawable.tornado);
+                                                 weatherIcon.setImageResource(R.drawable.image_tornado);
                                              } else if (conditionText.equalsIgnoreCase("Isolated Thunderstorms")
                                                      || conditionText.equalsIgnoreCase("Scattered Thunderstorms")
                                                      || conditionText.equalsIgnoreCase("Scattered Showers")) {
-                                                 weatherIcon.setImageResource(R.drawable.isolated_thunderstorms);
+                                                 weatherIcon.setImageResource(R.drawable.image_isolated_thunderstrms);
                                              } else if (conditionText.equalsIgnoreCase("Partly Cloudy")) {
-                                                 weatherIcon.setImageResource(R.drawable.partly_cloudy);
+                                                 weatherIcon.setImageResource(R.drawable.image_partly_cloudy);
                                              } else if (conditionText.equalsIgnoreCase("Mostly Cloudy")
                                                      || conditionText.equalsIgnoreCase("Cloudy")) {
-                                                 weatherIcon.setImageResource(R.drawable.mostly_cloudy);
+                                                 weatherIcon.setImageResource(R.drawable.image_mostly_cloudy);
                                              } else if (conditionText.equalsIgnoreCase("Mostly Cloudy (Day)")) {
-                                                 weatherIcon.setImageResource(R.drawable.mostly_cloudy_day);
+                                                 weatherIcon.setImageResource(R.drawable.image_mostly_cloudy_day);
                                              } else if (conditionText.equalsIgnoreCase("Mostly Cloudy (Night)")) {
-                                                 weatherIcon.setImageResource(R.drawable.mostly_cloudy_night);
+                                                 weatherIcon.setImageResource(R.drawable.image_mostly_cloudy_night);
                                              } else if (conditionText.equalsIgnoreCase("Partly Cloudy (Night)")) {
-                                                 weatherIcon.setImageResource(R.drawable.partly_cloudy_night);
+                                                 weatherIcon.setImageResource(R.drawable.image_partly_cloudy_night);
                                              } else if (conditionText.equalsIgnoreCase("Clear (Night)")
                                                      || conditionText.equalsIgnoreCase("Fair (Night)")) {
-                                                 weatherIcon.setImageResource(R.drawable.clear_night);
+                                                 weatherIcon.setImageResource(R.drawable.image_clear_night);
                                              } else if (conditionText.equalsIgnoreCase("Sunny")
                                                      || conditionText.equalsIgnoreCase("Fair (Day)")
                                                      || conditionText.equalsIgnoreCase("Hot")
                                                      || conditionText.equalsIgnoreCase("Clear")) {
-                                                 weatherIcon.setImageResource(R.drawable.sunny);
+                                                 weatherIcon.setImageResource(R.drawable.image_sunny);
                                              } else if (conditionText.equalsIgnoreCase("Breezy")
                                                      || conditionText.equalsIgnoreCase("Partly Cloudy (Day)")) {
-                                                 weatherIcon.setImageResource(R.drawable.breeze);
+                                                 weatherIcon.setImageResource(R.drawable.image_breeze);
                                              } else if (conditionText.equalsIgnoreCase("Mixed Rain And Snow")
                                                      || conditionText.equalsIgnoreCase("Mixed Rain And Sleet")
                                                      || conditionText.equalsIgnoreCase("Mixed Snow And Sleet")) {
-                                                 weatherIcon.setImageResource(R.drawable.mixed_rain_and_snow);
+                                                 weatherIcon.setImageResource(R.drawable.image_mixed_rain_and_snow);
                                              } else if (conditionText.equalsIgnoreCase("Freezing Drizzle")) {
-                                                 weatherIcon.setImageResource(R.drawable.freezy);
+                                                 weatherIcon.setImageResource(R.drawable.image_freezy);
                                              } else if (conditionText.equalsIgnoreCase("Drizzle")
                                                      || conditionText.equalsIgnoreCase("Freezing Rain")) {
-                                                 weatherIcon.setImageResource(R.drawable.drizzle);
+                                                 weatherIcon.setImageResource(R.drawable.image_drizzle);
                                              } else if (conditionText.equalsIgnoreCase("Foggy")) {
-                                                 weatherIcon.setImageResource(R.drawable.mostly_cloudy);
+                                                 weatherIcon.setImageResource(R.drawable.image_mostly_cloudy);
                                              } else if (conditionText.equalsIgnoreCase("Hail")) {
-                                                 weatherIcon.setImageResource(R.drawable.hail);
+                                                 weatherIcon.setImageResource(R.drawable.image_hail);
                                              } else if (conditionText.equalsIgnoreCase("Dust")
                                                      || conditionText.equalsIgnoreCase("Foggy")
                                                      || conditionText.equalsIgnoreCase("Haze")
                                                      || conditionText.equalsIgnoreCase("Smoky")) {
-                                                 weatherIcon.setImageResource(R.drawable.dust);
+                                                 weatherIcon.setImageResource(R.drawable.image_dust);
                                              } else if (conditionText.equalsIgnoreCase("Scattered Snow Showers")) {
-                                                 weatherIcon.setImageResource(R.drawable.scattered_snow_showers);
+                                                 weatherIcon.setImageResource(R.drawable.image_scattered_snow_showers);
                                              } else if (conditionText.equalsIgnoreCase("Blustery")
                                                      || conditionText.equalsIgnoreCase("Windy")
                                                      || conditionText.equalsIgnoreCase("Cold")) {
-                                                 weatherIcon.setImageResource(R.drawable.blustery);
+                                                 weatherIcon.setImageResource(R.drawable.image_blustery);
                                              } else if (conditionText.equalsIgnoreCase("Snow")
                                                      || conditionText.equalsIgnoreCase("Snow Showers")
                                                      || conditionText.equalsIgnoreCase("Heavy Snow")
@@ -344,9 +342,9 @@ public class MainFragment extends Fragment {
                                                      || conditionText.equalsIgnoreCase("Light Snow Showers")
                                                      || conditionText.equalsIgnoreCase("Blowing Snow")
                                                      || conditionText.equalsIgnoreCase("Sleet")) {
-                                                 weatherIcon.setImageResource(R.drawable.snow);
+                                                 weatherIcon.setImageResource(R.drawable.image_snow);
                                              } else {
-                                                 weatherIcon.setImageResource(R.drawable.na);
+                                                 weatherIcon.setImageResource(R.drawable.image_na);
                                              }
                                              conditionTv.setText(conditionText);
                                          } else {

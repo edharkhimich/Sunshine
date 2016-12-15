@@ -134,7 +134,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ItemHo
             } else if (condition.equalsIgnoreCase("Partly Cloudy")) {
                 holder.itemImage.setImageResource(R.drawable.ic_light_clouds);
             } else if (condition.equalsIgnoreCase("Mostly Cloudy") || condition.equalsIgnoreCase("Cloudy")) {
-                holder.itemImage.setImageResource(R.drawable.ic_cloudy);
+                holder.itemImage.setImageResource(R.drawable.weather_cloudy);
             } else if (condition.equalsIgnoreCase("Foggy") || condition.equalsIgnoreCase("Haze")
                     || condition.equalsIgnoreCase("Smoky")) {
                 holder.itemImage.setImageResource(R.drawable.ic_fog);
